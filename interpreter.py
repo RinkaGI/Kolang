@@ -1,40 +1,51 @@
-### KOLANG PROGRAMMING LANGUAGE: PYTHON WITH BASIC SYNTAX
+#Native
+import os.path
+import subprocess
+import sys
+import shutil
+#Custom
+from parse import Parser
+from error import Error
 
-# Import sys
-from sys import *
+class Interpreter:
+    def Interpret(self, code : str) -> None:
+        subprocess.call(["python", "output.py"])
 
-# Open file function
-def open_file(filename):
-    data = open(filename, 'r').read()
-    return data
 
-# Parse function, this is for execute the code
-def parse(filecontents):
-    code = ""
-
-    # Print function
-    if "PRINT " in filecontents:
-        code = filecontents.replace("PRINT ", "") # Change print to space
-        code = code.replace("\n", "") # And space and more.
-        code = code.replace("\"", "")
-
-        # Semicolon code
-        if ";" in code:
-            code = code[:-1] # Quit the last character
-            if "; " in code:
-                code = code.replace("; ", "\n") # For you can do: PRINT "HELLO"; PRINT " WORLD";
-            else:
-                code = code.replace(";", "\n")
-
-    # return code parsed
-    if code is not None:
-        return code
+def GetCode(filePath) -> str:
+    if os.path.isfile(filePath):
+        with open(filePath, 'r') as file:
+            return file.read()
     else:
-        return ""
+        Error("No se ha encontrado el archivo")
 
-def run():
-    # Run code
-    data = open_file(argv[1])
-    print(parse(data))
+def HandleArgs() -> None:
+    if sys.argv[1] == "--help" or sys.argv[1] == "-h":
+        Error('''
+        Command line arguments:
+        --help -h: Escribe este mensaje
+        --run -r (default) [file]: Inicializa el interprete a un archivo en especifico
+            ''')
+    elif sys.argv[1] == "--run" or sys.argv[1] == "-r":
+        if len(sys.argv) < 3:
+            Error("No coinciden los numeros de los argumentos")
+        else:
+            if os.path.isfile(sys.argv[2]):
+                parser = Parser(GetCode((sys.argv[2])))
+                interpreter = Interpreter()
+                interpreter.Interpret(parser.code)
+            else:
+                Error("Archivo no encontrado")
+    else:
+        Error("El argumento es invalido")
 
-run()
+    if (os.path.isfile("output.py")):
+        os.remove("output.py")
+
+def CheckArgs() -> str:
+    if len(sys.argv) < 2:
+        Error("Numero invalido de argumentos")
+    HandleArgs()
+    
+if __name__ == "__main__":
+    CheckArgs()
