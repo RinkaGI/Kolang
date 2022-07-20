@@ -1,0 +1,15 @@
+VAR NUM1 = 5
+VAR NUM2 = 5
+
+SI NUM1 == NUM2:
+  ESCRIBIR "Es igual"
+O NUM1 >= NUM2:
+  ESCRIBIR "El primer numero no es igual"
+OTRA_COSA:
+  ESCRIBIR "Algo"
+  
+NUM1 = 10
+NUM2 = 3
+
+SI NUM1 != NUM2:
+  ESCRIBIR "No es igual"
