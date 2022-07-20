@@ -1,1 +1,2 @@
-
+VAR NOMBRE = RECIBIR "Escribe tu nombre: "
+ESCRIBIR "Tu nombre es: " + NOMBRE
